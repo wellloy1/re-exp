@@ -29,25 +29,18 @@ function generateReExportCode(filename, exportedNames, extension, cjs) {
 }
 
 function generateReExportCodeCJS(filename, exportedNames, extension, cjs) {
+	console.log(exportedNames)
 	let exportDefaultStatement = ""
 	let exported = []
 	let exportString = ""
 	let ext = ""
 
-	if (exportedNames.includes("default") && exportedNames.includes(filename)) {
-		return `module.exports.${filename} = require('./${filename}${ext}');\n`
-	}
-
-	if (!exportedNames.includes("default") && !exportedNames.includes(filename) && exportedNames.length > 1) {
+	if (exportedNames.includes("default")) {
 		return `module.exports.${filename} = require('./${filename}${ext}');\n`
 	}
 
 	exportedNames.forEach((exportedName) => {
-		if (exportedName === "default") {
-			exportDefaultStatement = `module.exports.${filename} = require('./${filename}${ext}').default`
-		} else {
-			exported.push(exportedName)
-		}
+		exported.push(exportedName)
 	})
 
 	exportString = exportDefaultStatement
@@ -64,4 +57,5 @@ function generateReExportCodeCJS(filename, exportedNames, extension, cjs) {
 
 	return exportString
 }
+
 module.exports = { generateReExportCode, generateReExportCodeCJS }

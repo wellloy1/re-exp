@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "baseUrl": "./",
-        "allowJs": false,
+        "allowJs": true,
+        "checkJs": false
     },
     "include": ["example"]
 }

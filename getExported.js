@@ -9,49 +9,82 @@ function getExportedNames(filepath) {
 		parser: {
 			parse(source) {
 				return babelParser.parse(source, {
-					sourceType: "module",
+					sourceType: "module", // Для поддержки ESM
 					plugins: ["jsx", "typescript", "classProperties"],
 				})
 			},
 		},
 	})
 
-	const exportedNames = []
+	const exportedNames = new Set()
 
 	recast.visit(ast, {
+		// CommonJS: module.exports = ...
+		visitAssignmentExpression(path) {
+			const { left, right } = path.node
+			if (left.type === "MemberExpression" && left.object.name === "module" && left.property.name === "exports") {
+				if (right.type === "Identifier" || right.type === "FunctionExpression" || right.type === "ClassExpression") {
+					exportedNames.add("default")
+				} else if (right.type === "ObjectExpression") {
+					right.properties.forEach((prop) => {
+						if (prop.key && prop.key.name) {
+							exportedNames.add(prop.key.name)
+						}
+					})
+				}
+			}
+			this.traverse(path)
+		},
+		// CommonJS: module.exports.Name = ...
+		visitExpressionStatement(path) {
+			const expr = path.node.expression
+			if (
+				expr.type === "AssignmentExpression" &&
+				expr.left.type === "MemberExpression" &&
+				expr.left.object.type === "MemberExpression" &&
+				expr.left.object.object.name === "module" &&
+				expr.left.object.property.name === "exports"
+			) {
+				exportedNames.add(expr.left.property.name)
+			}
+			this.traverse(path)
+		},
+		// ESM: ExportNamedDeclaration
 		visitExportNamedDeclaration(path) {
 			const declaration = path.node.declaration
 			if (declaration) {
 				if (declaration.declarations) {
 					declaration.declarations.forEach((decl) => {
 						if (decl.id && decl.id.name) {
-							exportedNames.push(decl.id.name)
+							exportedNames.add(decl.id.name)
 						}
 					})
 				} else if (declaration.id && declaration.id.name) {
-					exportedNames.push(declaration.id.name)
+					exportedNames.add(declaration.id.name)
 				}
 			}
 
 			if (path.node.specifiers) {
 				path.node.specifiers.forEach((specifier) => {
-					exportedNames.push(specifier.exported.name)
+					exportedNames.add(specifier.exported.name)
 				})
 			}
 
 			this.traverse(path)
 		},
+		// ESM: ExportDefaultDeclaration
 		visitExportDefaultDeclaration(path) {
-			exportedNames.push("default")
+			exportedNames.add("default")
 			this.traverse(path)
 		},
+		// ESM: ExportAllDeclaration
 		visitExportAllDeclaration(path) {
-			exportedNames.push("*: " + path.node.source.value)
+			exportedNames.add("*: " + path.node.source.value)
 			this.traverse(path)
 		},
 	})
 
-	return exportedNames
+	return Array.from(exportedNames)
 }
 
 module.exports = { getExportedNames }
