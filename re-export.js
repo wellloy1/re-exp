@@ -36,10 +36,11 @@ async function exportFunction({ dirPath, files, ext, quiet }) {
 	let count = 0
 
 	let exportStr = ""
+	if (!quiet) console.log(`Re-exported:\n`)
 	Object.entries(exports).forEach(([key, arr]) => {
 		count++
 		exportStr += generateReExportCode(key, arr, ext)
-		if (!quiet) console.log(`Generated export: ` + exportStr)
+		if (!quiet) console.log(exportStr + "\n")
 	})
 
 	return { count, exportStr }
