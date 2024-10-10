@@ -1,13 +1,13 @@
 const fs = require("fs")
 const path = require("path")
 const { getExportedNames } = require("./getExported")
-const { generateReExportCode } = require("./generateReExportCode")
+const { generateReExportCode, generateReExportCodeCJS } = require("./generateReExportCode")
 
-async function reExport({ dir, ext = "js", quiet }) {
+async function reExport({ dir, ext = "js", cjs = false, quiet = false }) {
 	const dirPath = path.join(process.cwd(), dir)
 	const files = await fs.promises.readdir(dirPath)
 
-	const { count, exportStr } = await exportFunction({ dirPath, files, ext })
+	const { count, exportStr } = await exportFunction({ dirPath, files, ext, cjs })
 
 	if (count === 0) {
 		console.log(`\nNothing found as exports in dir "${dir}" for .${ext} extension`)
@@ -24,7 +24,7 @@ async function reExport({ dir, ext = "js", quiet }) {
 	if (!quiet) console.log(exportStr)
 }
 
-async function exportFunction({ dirPath, files, ext }) {
+async function exportFunction({ dirPath, files, ext, cjs }) {
 	const exports = {}
 	for (const file of files) {
 		const filePath = path.join(dirPath, file)
@@ -40,9 +40,10 @@ async function exportFunction({ dirPath, files, ext }) {
 
 	let exportStr = ""
 
+	const generateCodeFunction = cjs ? generateReExportCodeCJS : generateReExportCode
 	Object.entries(exports).forEach(([key, arr]) => {
 		count++
-		exportStr += generateReExportCode(key, arr, ext)
+		exportStr += generateCodeFunction(key, arr, ext)
 	})
 	return { count, exportStr }
 }

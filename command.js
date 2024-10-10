@@ -7,8 +7,10 @@ const options = {
 	"-d": undefined,
 	"-e": undefined,
 	"-q": undefined,
+	"-c": undefined,
 	"--dir": undefined,
 	"--ext": undefined,
+	"--cjs": undefined,
 	"--quiet": undefined,
 }
 
@@ -22,6 +24,7 @@ for (let i = 0; i < args.length; i++) {
 	} else {
 		if (Object.hasOwn(options, arg)) {
 			if (arg === "-q" || arg === "--quiet") options[arg] = true
+			if (arg === "-c" || arg === "--cjs") options[arg] = true
 			else key = arg
 		} else throw Error(`Option "${arg}" not found.\n`)
 	}
@@ -30,5 +33,6 @@ for (let i = 0; i < args.length; i++) {
 reExport({
 	dir: options["-d"] ?? options["--dir"],
 	ext: options["-e"] ?? options["--ext"],
+	ext: options["-c"] ?? options["--cjs"],
 	quiet: options["-q"] ?? options["--quiet"],
 })
