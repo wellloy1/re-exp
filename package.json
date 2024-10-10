@@ -1,10 +1,12 @@
 {
-  "version": "1.1.7",
+  "version": "1.1.8",
   "name": "re-exp",
   "author": "Max Shane <wellloy1@gmail.com>",
   "description": "Creates an index file (.js, .ts, .jsx, .tsx) in a directory and re-exports variables from modules within that directory.",
   "scripts": {
-    "demo": "re-exp -d example -e ts",
+    "ts": "re-exp -d example/ts -e ts",
+    "js": "re-exp -d example/js -e js",
+    "cjs": "re-exp -d example/js-commonjs -e js -c",
     "postinstall": "chmod +x ./command.js"
   },
   "bin": {

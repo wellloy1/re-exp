@@ -43,7 +43,7 @@ async function exportFunction({ dirPath, files, ext, cjs }) {
 	const generateCodeFunction = cjs ? generateReExportCodeCJS : generateReExportCode
 	Object.entries(exports).forEach(([key, arr]) => {
 		count++
-		exportStr += generateCodeFunction(key, arr, ext)
+		exportStr += generateCodeFunction(key, arr, ext, cjs)
 	})
 	return { count, exportStr }
 }
