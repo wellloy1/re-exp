@@ -7,7 +7,7 @@ async function reExport({ dir, ext = "js", quiet }) {
 	const dirPath = path.join(process.cwd(), dir)
 	const files = await fs.promises.readdir(dirPath)
 
-	const { count, exportStr } = await exportFunction({ dirPath, files, ext })
+	const { count, exportStr } = await exportFunction({ dirPath, files, ext, quiet })
 
 	if (count === 0) {
 		console.log(`Nothing found as exports in dir "${dir}" for .${ext} extension`)
@@ -21,7 +21,7 @@ async function reExport({ dir, ext = "js", quiet }) {
 	console.log(`Created "${dir}/index.${ext}" file with exports from ${count} ${noun} in "${dir}" dir`)
 }
 
-async function exportFunction({ dirPath, files, ext }) {
+async function exportFunction({ dirPath, files, ext, quiet }) {
 	const exports = {}
 	for (const file of files) {
 		const filePath = path.join(dirPath, file)

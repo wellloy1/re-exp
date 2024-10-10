@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "re-exp",
   "author": "Max Shane <wellloy1@gmail.com>",
   "description": "Creates an index file (.js, .ts, .jsx, .tsx) in a directory and re-exports variables from modules within that directory.",
@@ -9,6 +9,14 @@
   },
   "bin": {
     "re-exp": "./command.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wellloy1/re-exp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wellloy1/re-exp/issues",
+    "email": "wellloy1@gmail.com"
   },
   "dependencies": {
     "@babel/parser": "^7.25.8",
