@@ -1,8 +1,6 @@
 # re-exp
 
-[npm](https://img.shields.io/npm/v/re-exp)
-[node](https://img.shields.io/node/v/re-exp)
-[license](https://img.shields.io/npm/l/re-exp)
+[npm](https://www.npmjs.com/package/re-exp)
 
 ## Overview
 

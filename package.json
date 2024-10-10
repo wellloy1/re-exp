@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.1.1",
   "name": "re-exp",
   "author": "Max Shane <wellloy1@gmail.com>",
   "description": "Creates an index file (.js, .ts, .jsx, .tsx) in a directory and re-exports variables from modules within that directory.",
