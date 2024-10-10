@@ -33,6 +33,6 @@ for (let i = 0; i < args.length; i++) {
 reExport({
 	dir: options["-d"] ?? options["--dir"],
 	ext: options["-e"] ?? options["--ext"],
-	ext: options["-c"] ?? options["--cjs"],
+	cjs: options["-c"] ?? options["--cjs"],
 	quiet: options["-q"] ?? options["--quiet"],
 })
