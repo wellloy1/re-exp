@@ -4,7 +4,7 @@ const { getExportedNames } = require("./getExported")
 const { generateReExportCode, generateReExportCodeCJS } = require("./generateReExportCode")
 
 async function reExport({ dir, ext = "js", cjs = false, quiet = false }) {
-	const dirPath = path.join(process.cwd(), dir)
+	const dirPath = path.isAbsolute(dir) ? path.normalize(dir) : path.join(process.cwd(), dir)
 	const files = await fs.promises.readdir(dirPath)
 
 	const { count, exportStr } = await exportFunction({ dirPath, files, ext, cjs })
