@@ -2,15 +2,21 @@ const fs = require("fs")
 const recast = require("recast")
 const babelParser = require("@babel/parser")
 
+function removeDecorators(source) {
+	return source.replace(/@/g, "//")
+}
+
 function getExportedNames(filepath) {
 	const fileContent = fs.readFileSync(filepath, "utf-8")
 
-	const ast = recast.parse(fileContent, {
+	const sanitizedContent = removeDecorators(fileContent)
+
+	const ast = recast.parse(sanitizedContent, {
 		parser: {
 			parse(source) {
 				return babelParser.parse(source, {
-					sourceType: "module", // Для поддержки ESM
-					plugins: ["jsx", "typescript", "classProperties"],
+					sourceType: "module",
+					plugins: ["jsx", "typescript", "classProperties", "decorators-legacy"],
 				})
 			},
 		},

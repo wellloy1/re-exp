@@ -1,9 +1,9 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.7",
   "name": "re-exp",
   "author": "Max Shane <wellloy1@gmail.com>",
   "description": "Creates an index file (.js, .ts, .jsx, .tsx) in a directory and re-exports variables from modules within that directory.",
-  "main":"command.js",
+  "main": "command.js",
   "scripts": {
     "ts": "node . -d example/ts -e ts",
     "js": "node . -d example/js -e js",

@@ -31,8 +31,12 @@ async function exportFunction({ dirPath, files, ext, cjs }) {
 		if (filePath === path.join(dirPath, `index.${ext}`)) continue
 		const stats = await fs.promises.stat(filePath)
 		if (stats.isFile() && path.extname(file) === `.${ext}`) {
-			const moduleExports = getExportedNames(filePath)
-			exports[path.parse(file).name] = moduleExports
+			try {
+				const moduleExports = getExportedNames(filePath)
+				exports[path.parse(file).name] = moduleExports
+			} catch (error) {
+				console.error("Error parsing file:", error)
+			}
 		}
 	}
 
